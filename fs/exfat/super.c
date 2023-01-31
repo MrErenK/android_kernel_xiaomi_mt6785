@@ -382,8 +382,7 @@ static int exfat_parse_options(struct super_block *sb, char *options, int silent
 		ret = __exfat_parse_option(sb, p, args, token, silent);
 		if (ret < 0) {
 			if (ret == -EINVAL && !silent) {
-				exfat_msg(sb, KERN_ERR,
-					"unrecognized mount option \"%s\" "
+				exfat_err(sb, "unrecognized mount option \"%s\" "
 					"or missing value", p);
 			}
 			return ret;
@@ -543,7 +542,7 @@ static int exfat_read_boot_sector(struct super_block *sb)
 	 */
 	if (p_boot->sect_size_bits < EXFAT_MIN_SECT_SIZE_BITS ||
 	    p_boot->sect_size_bits > EXFAT_MAX_SECT_SIZE_BITS) {
-		exfat_err(sb, "bogus sector size bits : %u\n",
+		exfat_err(sb, "bogus sector size bits : %u",
 				p_boot->sect_size_bits);
 		return -EINVAL;
 	}
@@ -552,7 +551,7 @@ static int exfat_read_boot_sector(struct super_block *sb)
 	 * sect_per_clus_bits could be at least 0 and at most 25 - sect_size_bits.
 	 */
 	if (p_boot->sect_per_clus_bits > EXFAT_MAX_SECT_PER_CLUS_BITS(p_boot)) {
-		exfat_err(sb, "bogus sectors bits per cluster : %u\n",
+		exfat_err(sb, "bogus sectors bits per cluster : %u",
 				p_boot->sect_per_clus_bits);
 		return -EINVAL;
 	}
